@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-class colorTracker(object):
+class ColorTracker(object):
     #path = "../videos/ball.mp4"
     path = 0                        # set the path of video to load and for primary camera keep it 0, for second camera 1 and so on.
     hue_tolerance = 5
@@ -72,25 +72,26 @@ class colorTracker(object):
 
     def start(self) :
         while(True):
-            ret, self.frame = self.cap.read()
-            #frame = cv2.flip(frame,1)
-            if not self.mouse_clicked : 
-                cv2.imshow("colorTracker",self.frame)   
-            else : 
-                frame_hsv = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HSV)
-                #cv2.imshow("frame_hsv",frame_hsv)
-                mask = cv2.inRange(frame_hsv, self.color_lower_range, self.color_higher_range)
-                #cv2.imshow("mask",mask)
-                mask = cv2.cvtColor(mask,cv2.COLOR_GRAY2BGR)
-                blur = cv2.GaussianBlur(mask,(3,3),0)
-                gray = cv2.cvtColor(blur,cv2.COLOR_BGR2GRAY)
-                edged = cv2.Canny(gray, 30, 200)
-                img2, contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                cv2.drawContours(self.frame, contours, -1, (0,255,0), 3)
-                cv2.rectangle(self.frame,(5,5),(20,20),(self.b,self.g,self.r),-1)
-                cv2.imshow("colorTracker",self.frame)  
-		
-		
+            available, self.frame = self.cap.read()
+            
+            if available : 
+                #frame = cv2.flip(frame,1)
+                if not self.mouse_clicked : 
+                    cv2.imshow("colorTracker",self.frame)   
+                else : 
+                    frame_hsv = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HSV)
+                    #cv2.imshow("frame_hsv",frame_hsv)
+                    mask = cv2.inRange(frame_hsv, self.color_lower_range, self.color_higher_range)
+                    #cv2.imshow("mask",mask)
+                    mask = cv2.cvtColor(mask,cv2.COLOR_GRAY2BGR)
+                    blur = cv2.GaussianBlur(mask,(3,3),0)
+                    gray = cv2.cvtColor(blur,cv2.COLOR_BGR2GRAY)
+                    edged = cv2.Canny(gray, 30, 200)
+                    img2, contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                    cv2.drawContours(self.frame, contours, -1, (0,255,0), 3)
+                    cv2.rectangle(self.frame,(5,5),(20,20),(self.b,self.g,self.r),-1)
+                    cv2.imshow("colorTracker",self.frame)  
+            		
             if cv2.waitKey(100) == 13:
                 break
     
@@ -100,6 +101,6 @@ class colorTracker(object):
         cv2.destroyAllWindows()
 
 
-CT = colorTracker()
+CT = ColorTracker()
 CT.start()
 CT.end()
