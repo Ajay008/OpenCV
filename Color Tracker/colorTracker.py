@@ -17,8 +17,8 @@ class ColorTracker(object):
 
     def __init__(self) :
         self.cap = cv2.VideoCapture(self.path)
-        cv2.namedWindow("colorTracker")
-        cv2.setMouseCallback('colorTracker', self.getCoords)
+        cv2.namedWindow("Color Tracker")
+        cv2.setMouseCallback('Color Tracker', self.getCoords)
 
     def getCoords(self,event,x,y,flags,param) :
         if event == cv2.EVENT_LBUTTONDOWN:
@@ -74,23 +74,22 @@ class ColorTracker(object):
         while(True):
             available, self.frame = self.cap.read()
             
-            if available : 
-                #frame = cv2.flip(frame,1)
-                if not self.mouse_clicked : 
-                    cv2.imshow("colorTracker",self.frame)   
-                else : 
-                    frame_hsv = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HSV)
-                    #cv2.imshow("frame_hsv",frame_hsv)
-                    mask = cv2.inRange(frame_hsv, self.color_lower_range, self.color_higher_range)
-                    #cv2.imshow("mask",mask)
-                    mask = cv2.cvtColor(mask,cv2.COLOR_GRAY2BGR)
-                    blur = cv2.GaussianBlur(mask,(3,3),0)
-                    gray = cv2.cvtColor(blur,cv2.COLOR_BGR2GRAY)
-                    edged = cv2.Canny(gray, 30, 200)
-                    img2, contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-                    cv2.drawContours(self.frame, contours, -1, (0,255,0), 3)
-                    cv2.rectangle(self.frame,(5,5),(20,20),(self.b,self.g,self.r),-1)
-                    cv2.imshow("Color Tracker",self.frame)  
+            #frame = cv2.flip(frame,1)
+            if not self.mouse_clicked : 
+                cv2.imshow("Color Tracker",self.frame)   
+            else : 
+                frame_hsv = cv2.cvtColor(self.frame, cv2.COLOR_BGR2HSV)
+                #cv2.imshow("frame_hsv",frame_hsv)
+                mask = cv2.inRange(frame_hsv, self.color_lower_range, self.color_higher_range)
+                #cv2.imshow("mask",mask)
+                mask = cv2.cvtColor(mask,cv2.COLOR_GRAY2BGR)
+                blur = cv2.GaussianBlur(mask,(3,3),0)
+                gray = cv2.cvtColor(blur,cv2.COLOR_BGR2GRAY)
+                edged = cv2.Canny(gray, 30, 200)
+                img2, contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                cv2.drawContours(self.frame, contours, -1, (0,255,0), 3)
+                cv2.rectangle(self.frame,(5,5),(20,20),(self.b,self.g,self.r),-1)
+                cv2.imshow("Color Tracker",self.frame)  
             		
             if cv2.waitKey(100) == 13:
                 break
