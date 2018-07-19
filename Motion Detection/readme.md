@@ -1,9 +1,11 @@
-Motion Detection
+#Motion Detection
 
-
-
-Description : 
-	motionDetection.py is a python program to detect motion by any object or even movement in camera in the video input.
+------
+###Description : 
+...
+motionDetection.py is a python program to detect motion by any object or even movement in camera in the video input.
+...
+-----
 
 Working : 
 	It primarily works on BackgroungSubtractor function of OpenCV. 
