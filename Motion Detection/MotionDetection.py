@@ -17,22 +17,16 @@ class MotionDetection(object) :
         while(True):
             ret, frame = self.cap.read()
     
-            cv2.imshow("original",frame)
+            cv2.imshow("Motion Detection",frame)
             blur = cv2.GaussianBlur(frame,(19,19),0)
-            
             mask = self.sub.apply(blur)
             #cv2.imshow("sub",mask)
-            
             img_temp = np.ones(frame.shape,dtype="uint8") * 255
-            
             img_temp_and = cv2.bitwise_and(img_temp,img_temp,mask=mask)
-            
             img_temp_and_bgr = cv2.cvtColor(img_temp_and,cv2.COLOR_BGR2GRAY)    
-            
             hist,bins = np.histogram(img_temp_and_bgr.ravel(),256,[0,256]) 
-            
             print("Threshold =", self.threshold, ", Noise = ",hist[255], )
-            
+
             if hist[255] > self.threshold : 
                 winsound.Beep(self.frequency,100)    # winsound.Beep(frequency, duration)
                 

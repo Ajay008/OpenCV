@@ -6,7 +6,7 @@
 
 
 ### Working : 
-> * It primarily works on BackgroungSubtractor function of OpenCV. 
+> * It works on BackgroungSubtractor function of OpenCV. 
 > * After backgroundsubtraction, histogram is used to plot noise in the video frame.
 > * If the noise in the video frame is grater than the threshold set, then a beep sound will be made.
 

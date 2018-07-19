@@ -90,7 +90,7 @@ class ColorTracker(object):
                     img2, contours, hierarchy = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
                     cv2.drawContours(self.frame, contours, -1, (0,255,0), 3)
                     cv2.rectangle(self.frame,(5,5),(20,20),(self.b,self.g,self.r),-1)
-                    cv2.imshow("colorTracker",self.frame)  
+                    cv2.imshow("Color Tracker",self.frame)  
             		
             if cv2.waitKey(100) == 13:
                 break
