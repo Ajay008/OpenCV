@@ -26,7 +26,6 @@ class OpticalFlow() :
         cv2.namedWindow('Optical Flow')
         cv2.setMouseCallback('Optical Flow', self.draw_circle)
 
-
     def draw_circle(self, event, x, y, flags, params) :
         if event == cv2.EVENT_LBUTTONDOWN :      
             x = np.float32(x)
