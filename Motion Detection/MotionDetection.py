@@ -3,8 +3,9 @@ import numpy as np
 import winsound
 
 class MotionDetection(object) : 
+
     #path = "../videos/walking.avi"
-    path = 0
+	path = 0
     cap = cv2.VideoCapture(path)
     sub = cv2.createBackgroundSubtractorMOG2()
     threshold = 5000
