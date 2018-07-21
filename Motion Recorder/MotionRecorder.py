@@ -40,7 +40,6 @@ class MotionRecorder(object):
                 self.skip_counter = 0
                 self.img_counter += 1 
                 self.temp_img_for_video.append(img)
-
             else : 
                 self.skip_counter += 1
                 if self.skip_counter >= 5 :
