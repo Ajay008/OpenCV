@@ -32,6 +32,9 @@ if you want to see features in the output.
 > * (optional) press 'r' on keyboard to reset the selected image. so that you can select a new object to track
 > * the object will be marked if found in the coming frames.
 > * press Return/Enter key to exit.
+
+> Try this,
+> * Place the front page of book or a page with cartoons on it. (Because the objects will be unique and more features will be extracted and hence it will be track will higher accuracy.) 
 	
 
 ### Prerequisites : 
