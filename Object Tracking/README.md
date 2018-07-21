@@ -34,7 +34,7 @@ if you want to see features in the output.
 > * press Return/Enter key to exit.
 
 > Try this,
-> * Place the front page of any book or a page with cartoons on it infront of the webcam. (Because the objects will be unique and more features will be extracted and hence it will be track will higher accuracy.) 
+> * Place the front page of any book or a page with cartoons on it infront of the webcam. (Because the objects will be unique and more features will be extracted and hence it will be tracked with higher accuracy.) 
 	
 
 ### Prerequisites : 
