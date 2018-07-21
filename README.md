@@ -2,7 +2,7 @@
 
 
 ### Description :
-> * This repository includes Computer Vision applications like Motion Detection, Color Tracking, Motion Rcording, Optical Flow and Object Tracking using Python with OpenCV library
+> * This repository includes Computer Vision programs like Motion Detection, Color Tracking, Motion Rcording, Optical Flow and Object Tracking using Python with OpenCV library
 
 
 ### Prerequisites : 
