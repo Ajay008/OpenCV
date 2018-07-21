@@ -24,10 +24,12 @@
 if you want to see features in the output.
 > * change the various accuracy varibles to acquires desired result.
 
-
 > To Run code, 
-> * open command prompt and type "python ObjectTracking.py" 
+> * open command prompt and type "python ObjectTracking.py"
+> * (optional) press 'p' on keyboard to pause video. 
 > * draw a rectangle around the object in the video frame using your mouse.
+> * (optional) if you pressed 'p' earlier then press 's' on keyboard to start video.
+> * (optional) press 'r' on keyboard to reset the selected image. so that you can select a new object to track
 > * the object will be marked if found in the coming frames.
 > * press Return/Enter key to exit.
 	

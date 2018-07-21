@@ -9,7 +9,7 @@ lucas_kanade_params = dict(winSize  = (15,15), maxLevel = 2, criteria = (cv2.TER
 
 class ObjectTracking(object) : 
 
-    #path = '../videos/cars.avi'
+    #path = './ball.mp4'
     path = 0
     draw_keypoints_enabled = True
     draw_bounding_rect_enabled = False
@@ -39,8 +39,9 @@ class ObjectTracking(object) :
     bounding_rect_bottom_right = (0,0)
     coords = []
     error = None
-
-
+    rect_point1 = (0,0)
+    rect_point2 = (0,0)
+ 
     def __init__(self):
         # Take first frame and find points in it
         _, self.prev_frame = self.cap.read()
@@ -53,32 +54,38 @@ class ObjectTracking(object) :
 
 
     def select_roi(self, event, x, y, flags, params) :
+        if(self.click_count == 1) :
+            self.rect_point2 = (x,y)
         if event == cv2.EVENT_LBUTTONDOWN and self.click_count < 2:
             self.click_count += 1      
             if self.click_count == 1 : 
                 self.top_left = (x,y)
+                self.rect_point1 = self.top_left
             elif self.click_count == 2 :
-                self.bottom_right = (x,y)
-                self.selected_image = self.frame[self.top_left[1]:self.bottom_right[1], self.top_left[0]:self.bottom_right[0], :]
-                self.selected_image_gray = cv2.cvtColor(self.selected_image, cv2.COLOR_BGR2GRAY)
-                cv2.imshow("selected_image",self.selected_image)
-                self.find_keypoints()
-                if self.error is None :
-                    self.tracker_enabled = True
-                self.error = None
+                if x < self.top_left[0] or y < self.top_left[1] :
+                    self.click_count -= 1
+                else : 
+                    self.bottom_right = (x,y)
+                    self.selected_image = self.frame[self.top_left[1]:self.bottom_right[1], self.top_left[0]:self.bottom_right[0], :]
+                    self.selected_image_gray = cv2.cvtColor(self.selected_image, cv2.COLOR_BGR2GRAY)
+                    cv2.imshow("selected_image",self.selected_image)
+                    self.find_keypoints()
+                    if self.error is None :
+                        self.tracker_enabled = True
 
 
     def find_keypoints(self):
-        print("find_keypoints", self.scan_count)
         surf = cv2.xfeatures2d.SURF_create(400)
         kp1,des1=surf.detectAndCompute(self.frame_gray,None)
         kp2,des2=surf.detectAndCompute(self.selected_image_gray,None)
+        #print(len(kp1), len(kp2))
 
-        if len(kp1) == 0 or len(kp2) == 0 :
+        if len(kp2) < 3 :
             self.error = "No keypoints found, Try again."
             return
+        else : 
+            self.error = None
 
-        print("hi")
         FLANN_INDEX_KDTREE = 1
         index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
         search_params = dict(checks = 50)
@@ -198,11 +205,10 @@ class ObjectTracking(object) :
                             cv2.line(self.frame,(center_x-10 ,center_y),(center_x+10 ,center_y),(255,0,0),2)
                             cv2.line(self.frame,(center_x ,center_y-10),(center_x ,center_y+10),(255,0,0),2)
                             cv2.circle(self.frame, (center_x, center_y), 15, (255,0,0), 2)
+                            cv2.putText(self.frame,str(len(self.coords)),(0,20),cv2.FONT_HERSHEY_SIMPLEX,1,color = (200,50,75),thickness = 3)
+                        else : 
+                            cv2.putText(self.frame,"Object Not Found",(0,20),cv2.FONT_HERSHEY_SIMPLEX,1,color = (200,50,75),thickness = 3)    
 
-
-
-
-                        cv2.putText(self.frame,str(len(self.coords)),(0,20),cv2.FONT_HERSHEY_SIMPLEX,1,color = (200,50,75),thickness = 3)
 
                         self.prev_gray = self.frame_gray.copy()
                         self.prev_points = self.new_points.reshape(-1,1,2)
@@ -216,19 +222,44 @@ class ObjectTracking(object) :
                         self.error = None
                     if self.scan_count == 500 :
                         self.scan_count == 0
-                    
-                cv2.imshow('Object Tracking',self.frame)
+                
+                error_free_frame = self.frame.copy()
+                if self.error is not None : 
+                    cv2.putText(self.frame, str(self.error), (0,20),cv2.FONT_HERSHEY_SIMPLEX,1,color = (200,50,75),thickness = 3)    
+
+                frame_copy = self.frame.copy()
+                if self.click_count == 1 and self.rect_point2[0] > self.rect_point1[0] and self.rect_point2[1] > self.rect_point1[1] : 
+                    cv2.rectangle(frame_copy, self.rect_point1, self.rect_point2, (255,0,0), 2)
+                    cv2.imshow('Object Tracking',frame_copy)
+                else : 
+                    cv2.imshow('Object Tracking',self.frame)
 
                 key = cv2.waitKey(25)
-                if key == 13: #13 is the Enter Key
-                    break
-                elif key == ord('p'):
-                    while cv2.waitKey(25) != ord('s'):
+                if key == ord('p'):
+                    key2 = cv2.waitKey(25)
+                    while key2 != ord('s'):
+                        if key2 == ord('r') : 
+                            self.frame = error_free_frame
+                            key = key2
+                        elif key2 == 13 :
+                            key = 13
+                            break
+
+                        if self.click_count == 1 and self.rect_point2[0] > self.rect_point1[0] and self.rect_point2[1] > self.rect_point1[1] : 
+                            frame_copy = self.frame.copy()
+                            cv2.rectangle(frame_copy, self.rect_point1, self.rect_point2, (255,0,0), 2)
+                            cv2.imshow('Object Tracking',frame_copy)
+                        else : 
+                            cv2.imshow('Object Tracking',self.frame)
+                        key2 = cv2.waitKey(25)
                         continue
-                elif key == ord('r') : 
+                if key == ord('r') : 
                     self.click_count = 0
                     self.tracker_enabled = False
-
+                    self.error = None
+                if key == 13: #13 is the Enter Key
+                    break
+                
 
     def end(self) :
         cv2.destroyAllWindows()
