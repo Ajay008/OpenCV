@@ -1,9 +1,9 @@
-# OpenCV Applications using Python with OpenCV Library
+# OpenCV programs using Python with OpenCV Library
 
 
 ### Description :
 > * This repository includes Computer Vision applications like Motion Detection, Color Tracking, Motion Rcording, Optical Flow and Object Tracking using Python with OpenCV library
-	
+
 
 ### Prerequisites : 
 > * Python 3.5
