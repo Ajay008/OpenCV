@@ -41,6 +41,8 @@ class ObjectTracking(object) :
     error = None
     rect_point1 = (0,0)
     rect_point2 = (0,0)
+    find_selected_image_keypoints = False
+    kp2, des2 = None, None
  
     def __init__(self):
         # Take first frame and find points in it
@@ -69,28 +71,31 @@ class ObjectTracking(object) :
                     self.selected_image = self.frame[self.top_left[1]:self.bottom_right[1], self.top_left[0]:self.bottom_right[0], :]
                     self.selected_image_gray = cv2.cvtColor(self.selected_image, cv2.COLOR_BGR2GRAY)
                     cv2.imshow("selected_image",self.selected_image)
+                    self.find_selected_image_keypoints = True
                     self.find_keypoints()
                     if self.error is None :
                         self.tracker_enabled = True
+                    self.find_selected_image_keypoints = False
 
 
     def find_keypoints(self):
         surf = cv2.xfeatures2d.SURF_create(400)
         kp1,des1=surf.detectAndCompute(self.frame_gray,None)
-        kp2,des2=surf.detectAndCompute(self.selected_image_gray,None)
-        #print(len(kp1), len(kp2))
-
-        if len(kp2) < 3 :
-            self.error = "No keypoints found, Try again."
-            return
-        else : 
-            self.error = None
+        
+        if self.find_selected_image_keypoints : 
+            self.kp2,self.des2=surf.detectAndCompute(self.selected_image_gray,None)
+            #print(len(kp1), len(self.kp2))
+            if len(self.kp2) < 3 :
+                self.error = "No keypoints found, Try again."
+                return
+            else : 
+                self.error = None
 
         FLANN_INDEX_KDTREE = 1
         index_params = dict(algorithm = FLANN_INDEX_KDTREE, trees = 5)
         search_params = dict(checks = 50)
         flann = cv2.FlannBasedMatcher(index_params, search_params)
-        matches = flann.knnMatch(des1,des2,k=2)
+        matches = flann.knnMatch(des1,self.des2,k=2)
 
         good = []
         for m,n in matches:
@@ -99,14 +104,14 @@ class ObjectTracking(object) :
 
 
         list_kp1 = []
-        list_kp2 = []
+        #list_kp2 = []
         for mat in good:
             img1_idx = mat.queryIdx
-            img2_idx = mat.trainIdx
+            #img2_idx = mat.trainIdx
             (x1,y1) = kp1[img1_idx].pt
-            (x2,y2) = kp2[img2_idx].pt
+            #(x2,y2) = kp2[img2_idx].pt
             list_kp1.append((x1, y1))
-            list_kp2.append((x2, y2))
+            #list_kp2.append((x2, y2))
 
         self.prev_points = []
         self.prev_points = np.asarray(self.prev_points, dtype=np.float32).reshape(-1,2)
