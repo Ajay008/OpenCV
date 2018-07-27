@@ -1,5 +1,7 @@
 # Color Tracker
 
+[Watch on Youtube](https://www.youtube.com/watch?v=DR57hNiEF7Y)
+
 
 ### Description :
 > * Color Tracker can be used to highlight the selected color in the video.
@@ -12,6 +14,8 @@
 ### How to use ?
 > * You can change the path variable in the ".py" file to select your video source or keep path=0 for primary webcam.
 
+
+[Watch on Youtube](https://www.youtube.com/watch?v=DR57hNiEF7Y)
 > To Run code, 
 > * open command prompt and type "python ColorTracker.py"
 > * click on any color on the video to select color

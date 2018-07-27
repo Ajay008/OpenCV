@@ -1,5 +1,6 @@
 # Object Tracking
 
+[Watch on Youtube](https://www.youtube.com/watch?v=gnSevcgsakU)
 
 ### Description :
 > * Object Tracking in this program is done by using 2 algorithms 
@@ -24,6 +25,7 @@
 if you want to see features in the output.
 > * change the various accuracy varibles to acquires desired result.
 
+[Watch on Youtube](https://www.youtube.com/watch?v=gnSevcgsakU)
 > To Run code, 
 > * open command prompt and type "python ObjectTracking.py"
 > * (optional) press 'p' on keyboard to pause video. 
